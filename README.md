@@ -1,7 +1,7 @@
 # YY
 [SCIS2020](https://www.iwsec.org/scis/2020/) 3D2-1「Black-box攻撃における決定的Adversarial Examples生成手法の拡張と比較」にて提案された手法のソースコード。
 
-![サンプル](https://user-images.githubusercontent.com/60645850/73763102-512fe480-47b4-11ea-94a5-e01ef4ff6847.png)
+<img src="https://user-images.githubusercontent.com/60645850/73763102-512fe480-47b4-11ea-94a5-e01ef4ff6847.png" width="320px">
 
 ## 使用するライブラリ
 - numpy
