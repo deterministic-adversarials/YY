@@ -12,5 +12,16 @@
 - tensorflow
 
 
+## 使い方
+- モデルの訓練(MNIST)
+  ```python
+  python train_model_for_mnist.py
+  ```
+
+- 攻撃
+  ```python
+  python attack_on_mnist.py
+
+
 ## ライセンスについて
 YYに含まれるソースコードの一部は[gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial)を使わせていただいています。
