@@ -21,13 +21,13 @@
 - モデルの訓練(MNIST)
 
   ```python
-  python train_model_for_mnist.py
+  $ python train_model_for_mnist.py
   ```
   
 - 攻撃(MNIST)
 
   ```python
-  python attack_on_mnist.py
+  $ python attack_on_mnist.py
   ```
 
 CIFAR-10についても同様。
