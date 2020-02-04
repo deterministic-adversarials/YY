@@ -6,3 +6,7 @@
 - numpy
 - matplotlib
 - tensorflow
+
+
+## ライセンスについて
+YYに含まれるソースコードの一部は[gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial)を使わせていただいています。
