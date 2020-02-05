@@ -17,22 +17,22 @@ def pred(sess, env, x, target):
 
 
 ##
-def YY(sess, env, x, target, eps, img_size, img_chan):
+def YY(args, sess, env, x, target):
     
     num_queries = 0
 
-    for split in range(1,img_size+1):
+    for split in range(1,args.img_size+1):
         xadv = np.copy(x)  
 
         ## 画像の縦(横)を分割数splitで等分
         # 例 : 28を3等分 -> interval[0]=10, interval[1]=9, interval[2]=9
         interval = np.zeros((split), dtype=int)
-        for i in range(img_size):
+        for i in range(args.img_size):
             j = interval[i%split]
             interval[i%split] = j + 1
 
         ## split * split * img_chan で分割しノイズ付加
-        for c in range(img_chan):
+        for c in range(args.img_chan):
             h_start = 0
             h_end = 0
             for height in range(split):
@@ -51,7 +51,7 @@ def YY(sess, env, x, target, eps, img_size, img_chan):
                     num_queries += 1
 
                     ## 攻撃が成功していた場合はreturn
-                    if env.targeted:
+                    if args.targeted:
                         if yadv == target:
                             return xadv, num_queries, split, True
                     else:
@@ -59,8 +59,8 @@ def YY(sess, env, x, target, eps, img_size, img_chan):
                             return xadv, num_queries, split, True
                     
                     ## ノイズ
-                    mat_eps = np.zeros((img_size,img_size,img_chan), dtype=float)
-                    mat_eps[h_start:h_end,w_start:w_end,c] = eps
+                    mat_eps = np.zeros((args.img_size,args.img_size,args.img_chan), dtype=float)
+                    mat_eps[h_start:h_end,w_start:w_end,c] = args.epsilon
                     mat_eps = np.stack([mat_eps])
 
                     ## ノイズ付加
@@ -77,7 +77,7 @@ def YY(sess, env, x, target, eps, img_size, img_chan):
                     num_queries += 1
 
                     ## 攻撃が成功していた場合はreturn
-                    if env.targeted:
+                    if args.targeted:
                         if yadv == target:
                             return xadv_plus, num_queries, split, True
                     else:
@@ -86,7 +86,7 @@ def YY(sess, env, x, target, eps, img_size, img_chan):
 
                     ## 確信度の比較 -> xadv更新
                     # targeted攻撃のとき
-                    if env.targeted:
+                    if args.targeted:
                         # 確信度が上昇
                         if prob < prob_plus:
                             xadv = xadv_plus

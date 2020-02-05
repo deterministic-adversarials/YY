@@ -101,12 +101,10 @@ def pseudorandom_target(index, num_classes, true_class):
 
 ## 誤分類サンプルを除外
 def exclude_miss(sess, env, X_data, y_data, first, last):
-    y1 = predict(sess, env, X_data[first:last])
-
     z0 = np.argmax(y_data[first:last], axis=1)
-    z1 = np.argmax(y1, axis=1)
+    z1 = np.argmax(predict(sess, env, X_data[first:last]), axis=1)
     miss_indices = np.where(z0 != z1)
-    X_ex = np.delete(X_data[first:last], miss_indices, axis=0)
-    y_ex = np.delete(y_data[first:last], miss_indices, axis=0)
+    X = np.delete(X_data[first:last], miss_indices, axis=0)
+    y = np.delete(y_data[first:last], miss_indices, axis=0)
 
-    return (X_ex, y_ex)
+    return (X, y)

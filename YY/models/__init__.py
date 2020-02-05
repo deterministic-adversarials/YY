@@ -1,3 +1,4 @@
-from .model_mnist import *
-from .model_cifar10 import *
+from .cnn_1 import *
+from .cnn_2 import *
+from .vgg16 import *
 

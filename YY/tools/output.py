@@ -1,23 +1,22 @@
 import os
 import numpy as np
 import matplotlib
-#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-from .preparation_datasets import *
+from .preparate_datasets import load_mnist, load_cifar10, load_cifar100
 from .utils import predict
 
 
 ##
-def out_(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
+def print_out(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
 
-    if name=='mnist':
+    if name == 'mnist':
         img_size = 28
         img_chan = 1
         n_classes = 10
         X_tmp = np.empty((n_classes, img_size, img_size))
-    elif name=='cifar10':
+    elif name == 'cifar10':
         img_size = 32
         img_chan = 3
         n_classes = 10
@@ -41,7 +40,6 @@ def out_(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
         X_tmp[i] = np.squeeze(X_adv[cur])
         y_tmp[i] = y2[cur]
 
-
     print('\nPlotting results')
 
     fig = plt.figure(figsize=(n_classes, 1.2))
@@ -57,7 +55,6 @@ def out_(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
         ax.set_xlabel('{0} ({1:.2f})'.format(label[i], proba[i]),
                     fontsize=12)
 
-
     print('\nSaving figure')
 
     gs.tight_layout(fig)
@@ -66,13 +63,13 @@ def out_(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
 
 
 ##
-def sample_img(sess, env, X_adv, X_test, y_test, name='mnist'):
+def print_sample(sess, env, X_adv, X_test, y_test, name='mnist'):
 
-    if name=='mnist':
+    if name == 'mnist':
         img_size = 28
         img_chan = 1
         n_classes = 10
-    elif name=='cifar10':
+    elif name == 'cifar10':
         img_size = 32
         img_chan = 3
         n_classes = 10
@@ -109,3 +106,44 @@ def sample_img(sess, env, X_adv, X_test, y_test, name='mnist'):
     gs.tight_layout(fig)
     os.makedirs('img', exist_ok=True)
     plt.savefig('img/sample.png')
+
+
+##
+def print_10x10(sess, env, X_adv, name='mnist', attack='YY'):
+
+    if name == 'mnist':
+        img_size = 28
+        img_chan = 1
+        n_classes = 10
+    elif name == 'cifar10':
+        img_size = 32
+        img_chan = 3
+        n_classes = 10
+        
+
+    print('\nGenerating figure')
+
+    fig = plt.figure(figsize=(n_classes, n_classes))
+    gs = gridspec.GridSpec(n_classes, n_classes, wspace=0.1, hspace=0.1)
+
+    for i in range(n_classes):
+        for j in range(n_classes):
+            ax = fig.add_subplot(gs[i, j])
+            ax.imshow(X_adv[i, j], cmap='gray', interpolation='none')
+            ax.set_xticks([])
+            ax.set_yticks([])
+
+            if i == j:
+                for spine in ax.spines:
+                    ax.spines[spine].set_color('green')
+                    ax.spines[spine].set_linewidth(5)
+
+            if ax.is_first_col():
+                ax.set_ylabel(i, fontsize=20, rotation='horizontal', ha='right')
+            if ax.is_last_row():
+                ax.set_xlabel(j, fontsize=20)
+
+    gs.tight_layout(fig)
+    os.makedirs('img', exist_ok=True)
+    plt.savefig('img/{0}_{1}_10x10.png'.format(name, attack))
+
