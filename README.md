@@ -59,7 +59,7 @@ print('\nExcluding misclassification samples')
 evaluate(sess, env, X_test, y_test)
 ```
 
-```exclude_miss()``` in attack.py exclude some samples originally misclassified by the model in ```X_test``` and ```y_test``` datasets of ```0~9```.
+```exclude_miss()``` in attack.py exclude samples in ```0~9``` originally misclassified by the model in ```X_test``` and ```y_test``` datasets.
 
 
 
