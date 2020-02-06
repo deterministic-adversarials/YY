@@ -13,6 +13,7 @@
 - numpy
 - matplotlib
 - tensorflow
+
 各環境でインストールしてください。
 
 
