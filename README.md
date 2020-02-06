@@ -2,8 +2,14 @@
 
 [SCIS2020](https://www.iwsec.org/scis/2020/) 3D2-1「**Black-box攻撃における決定的Adversarial Examples生成手法の拡張と比較**」にて提案した手法。
 
+- 例
 <div align="center">
   <img src="https://user-images.githubusercontent.com/60645850/73763102-512fe480-47b4-11ea-94a5-e01ef4ff6847.png" width="500px">
+</div>
+
+- 10クラスそれぞれのサンプルに対しtargetに10クラス指定
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/60645850/73920006-f1e2e900-4907-11ea-83e7-06aaa2ec1ee0.png" width="100px">
 </div>
 
 
