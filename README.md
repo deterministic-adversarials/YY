@@ -14,13 +14,14 @@ This code is proposed on "**Extension and Comparison of Deterministic Black-box 
 
 
 
-## Library
+## Dependencies
 
-- numpy
-- matplotlib
-- tensorflow
+1. Python3
+2. Numpy
+3. Matplotlib
+4. Tensorflow
 
-This code require some libraries. Please install on your environment.
+Sample codes require this libraries. Please install on your environment.
 
 
 
@@ -57,14 +58,13 @@ print('\nExcluding misclassification samples')
 (X_test, y_test) = exclude_miss(sess, env, X_test, y_test, 0, 10)
 evaluate(sess, env, X_test, y_test)
 ```
-exclude_miss()でX_testデータセット及びy_testデータセット```0~9```枚目の中でもともと誤分類してしまうサンプルを除去します。引数の数字を大きくすればその分testに使うデータ量も増えます。
 
-exclude_miss
+```exclude_miss()``` in attack.py exclude some samples originally misclassified by the model in ```X_test``` and ```y_test``` datasets of ```0~9```.
 
 
 
 
 ## License
 
-Some of the code including this source use [gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial)
+Some of the codes including this source use [gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial). Thanks.
 
