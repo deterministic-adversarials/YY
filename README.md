@@ -13,7 +13,6 @@
 - numpy
 - matplotlib
 - tensorflow
-
 各環境でインストールしてください。
 
 
@@ -21,18 +20,26 @@
 ## 使い方
 
 - モデルの訓練(MNIST)
-
   ```python
-  $ python train_model_for_mnist.py
+  $ python train.py -d mnist -e 10 -m cnn_1
+  ```
+
+- モデルの訓練(CIFAR-10)
+  ```python
+  $ python train.py -d cifar10 -e 50 -m cnn_2
   ```
   
-- 攻撃(MNIST)
-
+- targeted攻撃(MNIST)
   ```python
-  $ python attack_on_mnist.py
+  $ python attack.py -d mnist -e 0.3 -m cnn_1 -t
   ```
+  -tオプションを消すとuntargeted攻撃
 
-CIFAR-10についても同様。
+- targeted攻撃(CIFAR-10)
+  ```python
+  $ python attack.py -d cifar10 -e 0.05 -m cnn_2 -t
+  ```
+  -tオプションを消すとuntargeted攻撃
 
 
 
