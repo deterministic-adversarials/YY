@@ -9,7 +9,7 @@
 
 - 10クラスそれぞれのサンプルに対しtargetに10クラス指定
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/60645850/73920006-f1e2e900-4907-11ea-83e7-06aaa2ec1ee0.png" width="100px">
+  <img src="https://user-images.githubusercontent.com/60645850/73920006-f1e2e900-4907-11ea-83e7-06aaa2ec1ee0.png" width="1000px">
 </div>
 
 
