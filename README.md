@@ -1,66 +1,70 @@
 # YY
 
-[SCIS2020](https://www.iwsec.org/scis/2020/) 3D2-1「**Black-box攻撃における決定的Adversarial Examples生成手法の拡張と比較**」にて提案した手法。
+This code is proposed on "**Extension and Comparison of Deterministic Black-box Adversarial Attacks**" in [SCIS2020](https://www.iwsec.org/scis/2020/).
 
-- 例
+- examples
 <div align="center">
   <img src="https://user-images.githubusercontent.com/60645850/73763102-512fe480-47b4-11ea-94a5-e01ef4ff6847.png" width="500px">
 </div>
 
-- 10クラスそれぞれのサンプルに対しtargetに10クラス指定
+- YY generates cross label adversarial on CIFAR-10. Labels on the left are the true labels, labels on the bottom are predicted labels by the model.
 <div align="center">
   <img src="https://user-images.githubusercontent.com/60645850/73920006-f1e2e900-4907-11ea-83e7-06aaa2ec1ee0.png" width="800px">
 </div>
 
 
 
-## 使用するライブラリ
+## Library
 
 - numpy
 - matplotlib
 - tensorflow
 
-各環境でインストールしてください。
+This code require some libraries. Please install on your environment.
 
 
 
-## 使い方
+## How to Use
 
-- モデルの訓練(MNIST)
+- train MNIST model
   ```python
   $ python train.py -d mnist -e 10 -m cnn_1
   ```
 
-- モデルの訓練(CIFAR-10)
+- train CIFAR-10 model
   ```python
   $ python train.py -d cifar10 -e 50 -m cnn_2
   ```
   
-- targeted攻撃(MNIST)
+- targeted attack on MNIST
   ```python
   $ python attack.py -d mnist -e 0.3 -m cnn_1 -t
   ```
-  -tオプションを消すとuntargeted攻撃
+  If you delete -t option, you can untargeted attack.
 
-- targeted攻撃(CIFAR-10)
+- targeted attack on CIFAR-10
   ```python
   $ python attack.py -d cifar10 -e 0.05 -m cnn_2 -t
   ```
-  -tオプションを消すとuntargeted攻撃
+  If you delete -t option, you can untargeted attack.
 
 
 
-## attack.py
+## Notice
 
 ```python
 print('\nExcluding misclassification samples')
 (X_test, y_test) = exclude_miss(sess, env, X_test, y_test, 0, 10)
 evaluate(sess, env, X_test, y_test)
 ```
-exclude_miss()でX_testデータセット及びy_testデータセット0~9枚目の中でもともと誤分類してしまうサンプルを除去します。引数の数字を大きくすればその分testに使うデータ量も増えます。
+exclude_miss()でX_testデータセット及びy_testデータセット```0~9```枚目の中でもともと誤分類してしまうサンプルを除去します。引数の数字を大きくすればその分testに使うデータ量も増えます。
+
+exclude_miss
 
 
 
-## ライセンスについて
 
-YYに含まれるソースコードの一部は [gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial) を使わせていただいています。
+## License
+
+Some of the code including this source use [gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial)
+
