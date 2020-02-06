@@ -44,6 +44,17 @@
 
 
 
+## attack.py
+
+```python
+print('\nExcluding misclassification samples')
+(X_test, y_test) = exclude_miss(sess, env, X_test, y_test, 0, 10)
+evaluate(sess, env, X_test, y_test)
+```
+exclude_miss()でX_testデータセット及びy_testデータセット0~9枚目の中でもともと誤分類してしまうサンプルを除去します。引数の数字を大きくすればその分testに使うデータ量も増えます。
+
+
+
 ## ライセンスについて
 
 YYに含まれるソースコードの一部は [gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial) を使わせていただいています。
