@@ -3,7 +3,7 @@ import numpy as np
 import random
 
 
-## モデル評価
+## evaluate models
 def evaluate(sess, env, X_data, y_data, batch_size=128):
 
     print('\nEvaluating')
@@ -30,7 +30,7 @@ def evaluate(sess, env, X_data, y_data, batch_size=128):
     return loss, acc
 
 
-## ラベル予測
+## predict labels
 def predict(sess, env, X_data, batch_size=128):
 
     print('\nPredicting')
@@ -51,7 +51,7 @@ def predict(sess, env, X_data, batch_size=128):
     return yval
 
 
-## モデル訓練
+## train models
 def train(sess, env, X_data, y_data, X_valid=None, y_valid=None, epochs=1,
           load=False, shuffle=True, batch_size=128, name='default'):
     
@@ -67,6 +67,12 @@ def train(sess, env, X_data, y_data, X_valid=None, y_valid=None, epochs=1,
     for epoch in range(epochs):
         print('\nEpoch {0}/{1}'.format(epoch + 1, epochs))
 
+        lr = 0.1
+        if epoch > 150:
+            lr = 0.01
+        if epoch > 250:
+            lr = 0.001
+
         if shuffle:
             print('\nShuffling data')
             ind = np.arange(n_sample)
@@ -80,6 +86,7 @@ def train(sess, env, X_data, y_data, X_valid=None, y_valid=None, epochs=1,
             end = min(n_sample, start + batch_size)
             sess.run(env.train_op, feed_dict={env.x: X_data[start:end],
                                               env.y: y_data[start:end],
+                                              env.learning_rate: lr,
                                               env.training: True})
         if X_valid is not None:
             evaluate(sess, env, X_valid, y_valid)
@@ -99,8 +106,16 @@ def pseudorandom_target(index, num_classes, true_class):
     return target
 
 
-## 誤分類サンプルを除外
+## exclude misclassified samples in X_data
 def exclude_miss(sess, env, X_data, y_data, first, last):
+    """
+    z0 = np.argmax(y_data, axis=1)
+    z1 = np.argmax(predict(sess, env, X_data), axis=1)
+    ind = z0 == z1
+
+    X_data = X_data[ind]
+    labels = z0[ind]
+    """
     z0 = np.argmax(y_data[first:last], axis=1)
     z1 = np.argmax(predict(sess, env, X_data[first:last]), axis=1)
     miss_indices = np.where(z0 != z1)

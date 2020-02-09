@@ -50,7 +50,7 @@ def cnn_2(args):
         env.y = tf.placeholder(tf.float32, (None, args.n_classes), name='y')
         env.training = tf.placeholder_with_default(False, (), name='mode')
 
-        env.ybar, logits = model(env.x, args, logits=True, training=env.training)
+        env.ybar, env.logits = model(env.x, args, logits=True, training=env.training)
 
         with tf.variable_scope('acc'):
             count = tf.equal(tf.argmax(env.y, axis=1), tf.argmax(env.ybar, axis=1))
@@ -58,7 +58,7 @@ def cnn_2(args):
 
         with tf.variable_scope('loss'):
             xent = tf.nn.softmax_cross_entropy_with_logits(labels=env.y,
-                                                        logits=logits)
+                                                        logits=env.logits)
             env.loss = tf.reduce_mean(xent, name='loss')
 
         with tf.variable_scope('train_op'):

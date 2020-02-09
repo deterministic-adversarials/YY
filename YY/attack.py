@@ -4,11 +4,11 @@ import numpy as np
 import tensorflow as tf
 import statistics
 
-from attacks import YY
-from models import cnn_1, cnn_2, vgg16
+from attacks import YY, PYY, SOM, SOM_kai, Parsimonious
+from models import cnn_1, cnn_2, vgg16, vgg19
 from tools import evaluate, predict, pseudorandom_target, exclude_miss
 from tools import load_mnist, load_cifar10, load_cifar100
-from tools import print_out, print_sample, print_10x10
+from tools import print_out, print_sample
 
 
 def log(args, path_out, success_query, q, X_data):
@@ -20,7 +20,7 @@ def log(args, path_out, success_query, q, X_data):
         f.write('all_sample = '+str(len(X_data))+'\n')
         f.write('success_sample = '+str(len(success_query))+'\n\n')
 
-        f.write('mnist_YY : eps='+str(args.epsilon)+' <'+str('targeted' if args.targeted else 'untargeted')+'>\n')
+        f.write(str(args.dataset)+'_'+str(args.attack)+' : eps='+str(args.epsilon)+' <'+str('targeted' if args.targeted else 'untargeted')+'>\n')
         f.write('mean:'+str(statistics.mean(success_query))+'\n')
         f.write('median:'+str(statistics.median(success_query))+'\n\n')
 
@@ -42,20 +42,20 @@ def make_adv(args, sess, env, X_data, y_data):
         print(' batch {0}/{1}'.format(idx+1, len(X_data)), end='\r')
         x = np.stack([x])
 
-        ## ターゲット設定
+        ## set target
         if args.targeted:
             target = np.argmax(y_data[idx])
-            target = pseudorandom_target(idx, args.n_classes, target)
+            target = pseudorandom_target(idx, args.n_classes, target)  # int
         else:
-            target = np.argmax(y_data[idx])
+            target = np.argmax(y_data[idx])  # int
         
-        ## xに対しA.E.生成
-        xadv, num_queries, split, success = YY(args, sess, env, x, target)
+        ## attack
+        xadv, num_queries, split, success = eval(args.attack)(args, sess, env, x, target)
         
-        ## 集計
-        yadv = sess.run(env.ybar, feed_dict={env.x: xadv})
-        yadv = np.squeeze(yadv)
-        yadv = np.argmax(yadv)
+        ## log
+        #yadv = sess.run(env.ybar, feed_dict={env.x: xadv})
+        #yadv = np.squeeze(yadv)
+        #yadv = np.argmax(yadv)
         if success:
             X_adv[idx] = xadv
             q[split] += 1
@@ -72,7 +72,7 @@ def make_adv(args, sess, env, X_data, y_data):
             q[0] += 1
     
     os.makedirs('querydata', exist_ok=True)
-    name_out = 'MNIST_'+str(args.epsilon)+'_'+str('targeted' if args.targeted else 'untargeted')+'_YY'
+    name_out = str(args.dataset)+'_'+str(args.attack)+'_'+str('targeted' if args.targeted else 'untargeted')+'_'+str(args.epsilon)
     path_out = './querydata/'+name_out+'.txt'
     log(args, path_out, success_query, q, X_data)
     return X_adv
@@ -95,6 +95,8 @@ def main(args):
         env = cnn_2(args)
     elif args.model == 'vgg16':
         env = vgg16(args)
+    elif args.model == 'vgg19':
+        env = vgg19(args)
 
     print('\nInitializing graph')
     sess = tf.InteractiveSession()
@@ -109,8 +111,9 @@ def main(args):
     evaluate(sess, env, X_test, y_test)
 
     print('\nExcluding misclassification samples')
-    # 1000 samples -> 0:1012
-    (X_test, y_test) = exclude_miss(sess, env, X_test, y_test, 0, 10)
+    # mnist 1000 samples -> 0:1010
+    # cifar10 1000 samples -> 0:
+    (X_test, y_test) = exclude_miss(sess, env, X_test, y_test, 0, 12)
     evaluate(sess, env, X_test, y_test)
 
     print('\nGenerating adversarial data')
@@ -120,15 +123,16 @@ def main(args):
     evaluate(sess, env, X_adv, y_test)
 
     print('\nResults')
-    print_sample(sess, env, X_adv, X_test, y_test, name=args.dataset)
-    print_out(sess, env, X_adv, X_test, y_test, name=args.dataset, attack='YY')
+    #print_sample(args, sess, env, X_adv, X_test, y_test)
+    #print_out(args, sess, env, X_adv, X_test, y_test, name=args.dataset, attack=args.attack)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('-a', '--attack', choices=['YY', 'PYY', 'SOM', 'SOM_kai', 'Parsimonious'], default='YY')
     parser.add_argument('-d', '--dataset', choices=['mnist', 'cifar10', 'cifar100'], default='mnist')
     parser.add_argument('-e', '--epsilon', type=float, default=0.1)
-    parser.add_argument('-m', '--model', choices=['cnn_1', 'cnn_2', 'vgg16'], default='cnn_1')
+    parser.add_argument('-m', '--model', choices=['cnn_1', 'cnn_2', 'vgg16', 'vgg19'], default='cnn_1')
     parser.add_argument('-t', '--targeted', action='store_true')
     args = parser.parse_args()
 

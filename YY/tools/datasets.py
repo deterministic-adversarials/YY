@@ -36,7 +36,7 @@ def load_mnist():
 ##
 def load_cifar10():
     
-    print('\nLoading CIFAR10')
+    print('\nLoading CIFAR-10')
 
     cifar10 = tf.keras.datasets.cifar10
     (X_train, y_train), (X_test, y_test) = cifar10.load_data()
@@ -67,7 +67,7 @@ def load_cifar10():
 ##
 def load_cifar100():
     
-    print('\nLoading CIFAR100')
+    print('\nLoading CIFAR-100')
 
     cifar100 = tf.keras.datasets.cifar100
     (X_train, y_train), (X_test, y_test) = cifar100.load_data()

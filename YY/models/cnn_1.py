@@ -48,9 +48,10 @@ def cnn_1(args):
         env.x = tf.placeholder(tf.float32, (None, args.img_size, args.img_size, args.img_chan),
                             name='x')
         env.y = tf.placeholder(tf.float32, (None, args.n_classes), name='y')
+        env.learning_rate = tf.placeholder_with_default(0.1, (), name='learning_rate')
         env.training = tf.placeholder_with_default(False, (), name='mode')
 
-        env.ybar, logits = model(env.x, args, logits=True, training=env.training)
+        env.ybar, env.logits = model(env.x, args, logits=True, training=env.training)
 
         with tf.variable_scope('acc'):
             count = tf.equal(tf.argmax(env.y, axis=1), tf.argmax(env.ybar, axis=1))
@@ -58,11 +59,11 @@ def cnn_1(args):
 
         with tf.variable_scope('loss'):
             xent = tf.nn.softmax_cross_entropy_with_logits(labels=env.y,
-                                                        logits=logits)
+                                                        logits=env.logits)
             env.loss = tf.reduce_mean(xent, name='loss')
 
         with tf.variable_scope('train_op'):
-            optimizer = tf.train.MomentumOptimizer(0.1,0.9) # SGD+momentum
+            optimizer = tf.train.MomentumOptimizer(learning_rate=env.learning_rate, momentum=0.9) # SGD+momentum
             env.train_op = optimizer.minimize(env.loss)
 
         env.saver = tf.train.Saver()

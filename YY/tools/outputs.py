@@ -4,24 +4,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-from .preparate_datasets import load_mnist, load_cifar10, load_cifar100
+from .datasets import load_mnist, load_cifar10, load_cifar100
 from .utils import predict
 
 
 ##
-def print_out(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
-
-    if name == 'mnist':
-        img_size = 28
-        img_chan = 1
-        n_classes = 10
-        X_tmp = np.empty((n_classes, img_size, img_size))
-    elif name == 'cifar10':
-        img_size = 32
-        img_chan = 3
-        n_classes = 10
-        X_tmp = np.empty((n_classes, img_size, img_size, img_chan))
-    
+def print_out(args, sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
 
     print('\nRandomly sample adversarial data from each category')
 
@@ -32,8 +20,10 @@ def print_out(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
     z1 = np.argmax(y1, axis=1)
     z2 = np.argmax(y2, axis=1)
 
-    y_tmp = np.empty((n_classes, n_classes))
-    for i in range(n_classes):
+    X_tmp = np.empty((args.n_classes, args.img_size, args.img_size, args.img_chan))
+    X_tmp = np.squeeze(X_tmp)
+    y_tmp = np.empty((args.n_classes, args.n_classes))
+    for i in range(args.n_classes):
         print('Target {0}'.format(i))
         ind, = np.where(np.all([z0 == i, z1 == i, z2 != i], axis=0))
         cur = np.random.choice(ind)
@@ -42,12 +32,12 @@ def print_out(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
 
     print('\nPlotting results')
 
-    fig = plt.figure(figsize=(n_classes, 1.2))
-    gs = gridspec.GridSpec(1, n_classes, wspace=0.05, hspace=0.05)
+    fig = plt.figure(figsize=(args.n_classes, 1.2))
+    gs = gridspec.GridSpec(1, args.n_classes, wspace=0.05, hspace=0.05)
 
     label = np.argmax(y_tmp, axis=1)
     proba = np.max(y_tmp, axis=1)
-    for i in range(n_classes):
+    for i in range(args.n_classes):
         ax = fig.add_subplot(gs[0, i])
         ax.imshow(X_tmp[i], cmap='gray', interpolation='none')
         ax.set_xticks([])
@@ -63,17 +53,7 @@ def print_out(sess, env, X_adv, X_test, y_test, name='mnist', attack='YY'):
 
 
 ##
-def print_sample(sess, env, X_adv, X_test, y_test, name='mnist'):
-
-    if name == 'mnist':
-        img_size = 28
-        img_chan = 1
-        n_classes = 10
-    elif name == 'cifar10':
-        img_size = 32
-        img_chan = 3
-        n_classes = 10
-
+def print_sample(args, sess, env, X_adv, X_test, y_test):
 
     y_test_label = np.argmax(y_test[0:10], axis=1)
     y_test_proba = np.max(y_test, axis=1)
@@ -82,8 +62,8 @@ def print_sample(sess, env, X_adv, X_test, y_test, name='mnist'):
     y_adv_label = np.argmax(y_adv, axis=1)
     y_adv_proba = np.max(y_adv, axis=1)
     
-    fig = plt.figure(figsize=(n_classes, 2.2))
-    gs = gridspec.GridSpec(2, n_classes, wspace=0.05, hspace=0.05)
+    fig = plt.figure(figsize=(args.n_classes, 2.2))
+    gs = gridspec.GridSpec(2, args.n_classes, wspace=0.05, hspace=0.05)
     
     # for image
     X_test = np.squeeze(X_test[0:10])
@@ -109,25 +89,15 @@ def print_sample(sess, env, X_adv, X_test, y_test, name='mnist'):
 
 
 ##
-def print_10x10(sess, env, X_adv, name='mnist', attack='YY'):
-
-    if name == 'mnist':
-        img_size = 28
-        img_chan = 1
-        n_classes = 10
-    elif name == 'cifar10':
-        img_size = 32
-        img_chan = 3
-        n_classes = 10
-        
+def print_10x10(args, sess, env, X_adv, name='mnist', attack='YY'):
 
     print('\nGenerating figure')
 
-    fig = plt.figure(figsize=(n_classes, n_classes))
-    gs = gridspec.GridSpec(n_classes, n_classes, wspace=0.1, hspace=0.1)
+    fig = plt.figure(figsize=(args.n_classes, args.n_classes))
+    gs = gridspec.GridSpec(args.n_classes, args.n_classes, wspace=0.1, hspace=0.1)
 
-    for i in range(n_classes):
-        for j in range(n_classes):
+    for i in range(args.n_classes):
+        for j in range(args.n_classes):
             ax = fig.add_subplot(gs[i, j])
             ax.imshow(X_adv[i, j], cmap='gray', interpolation='none')
             ax.set_xticks([])
