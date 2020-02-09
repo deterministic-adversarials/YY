@@ -21,7 +21,7 @@ This code is proposed on "**Extension and Comparison of Deterministic Black-box 
 3. Matplotlib
 4. Tensorflow
 
-Sample codes require this libraries. Please install on your environment.
+Sample codes require these libraries. Please install them on your environment.
 
 
 
@@ -59,7 +59,7 @@ print('\nExcluding misclassification samples')
 evaluate(sess, env, X_test, y_test)
 ```
 
-```exclude_miss()``` in attack.py exclude samples originally misclassified by the model in ```0~9``` pages of ```X_test``` and ```y_test``` datasets.
+```exclude_miss()``` in attack.py excludes samples originally misclassified by trained model in ```0~9``` pages of ```X_test``` and ```y_test``` datasets. If you run with more data, increase the number of the part of ```(0, 10)``` by yourself.
 
 
 
