@@ -41,13 +41,13 @@ Sample codes require this libraries. Please install on your environment.
   ```python
   $ python attack.py -d mnist -e 0.3 -m cnn_1 -t
   ```
-  If you delete -t option, you can untargeted attack.
+  If you delete -t option, attack on untargeted.
 
 - targeted attack on CIFAR-10
   ```python
   $ python attack.py -d cifar10 -e 0.05 -m cnn_2 -t
   ```
-  If you delete -t option, you can untargeted attack.
+  If you delete -t option, attack on untargeted.
 
 
 
