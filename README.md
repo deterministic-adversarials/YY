@@ -59,7 +59,7 @@ print('\nExcluding misclassification samples')
 evaluate(sess, env, X_test, y_test)
 ```
 
-```exclude_miss()``` in attack.py excludes samples originally misclassified by trained model in ```0-9``` pages of ```X_test``` datasets. If you run with more data, increase the number of the part of ```(0, 10)``` by yourself.
+```exclude_miss()``` in attack.py excludes samples originally misclassified by trained model in ```0-9``` pages of ```X_test``` datasets. If you want to run with more data, you need to increase the number of the part of ```(0, 10)```.
 
 
 
