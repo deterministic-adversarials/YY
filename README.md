@@ -66,5 +66,5 @@ evaluate(sess, env, X_test, y_test)
 
 ## License
 
-Some of the codes including this source use [gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial). Thanks.
+Some of the codes including this source use [gongzhitaao/tensorflow-adversarial](https://github.com/gongzhitaao/tensorflow-adversarial).
 
